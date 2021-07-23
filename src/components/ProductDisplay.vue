@@ -21,13 +21,20 @@
         <button class="button"
                 :class="{ disabledButton: !inStock }"
                 :disabled="!inStock" v-on:click="addToCart">Add to Cart</button>
+      <button class="button button-remove" v-on:click="removeFromCart">
+        Remove from Cart
+      </button>
       </div>
     </div>
+    <review-list v-if="reviews.length" :reviews="reviews"></review-list>
+    <review-form @review-submitted="addReview"></review-form>
   </div>
 </template>
 
 <script>
 import ProductDetails from "./ProductDetails";
+import ReviewForm from "./ReviewForm";
+import ReviewList from "./ReviewList";
 export default {
   name: "ProductDisplay",
   props: {
@@ -48,6 +55,7 @@ export default {
         { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
         { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 },
       ],
+      reviews: [],
       onSale: true
     }
   },
@@ -71,14 +79,22 @@ export default {
   },
   methods: {
     addToCart () {
-      this.$emit('add-to-cart')
+      this.$emit('add-to-cart',  this.variants[this.selectedVariant].id)
+    },
+    removeFromCart () {
+      this.$emit('remove-from-cart',  this.variants[this.selectedVariant].id)
     },
     updateVariant (index) {
       this.selectedVariant = index
+    },
+    addReview (review) {
+      this.reviews.push(review)
     }
   },
   components: {
-    ProductDetails
+    ReviewList,
+    ProductDetails,
+    ReviewForm
   }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div class="nav-bar"></div>
-    <div class="cart">Cart({{ cart }})</div>
-    <ProductDisplay :premium="premium" @add-to-cart="updateCart"></ProductDisplay>
+    <div class="cart">Cart({{ cart.length }})</div>
+    <product-display :premium="premium" @add-to-cart="updateCart" @remove-from-cart="removeFromCart"></product-display>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
   name: 'App',
   data() {
     return {
-      cart: 0,
+      cart: [],
       premium: true
     }
   },
@@ -21,8 +21,14 @@ export default {
     ProductDisplay
   },
   methods: {
-    updateCart() {
-      this.cart += 1
+    updateCart(id) {
+      this.cart.push(id)
+    },
+    removeFromCart(id) {
+      var index =  this.cart.indexOf(id);
+      if (index > -1) {
+        this.cart.splice(index, 1);
+      }
     }
   },
   components: {
